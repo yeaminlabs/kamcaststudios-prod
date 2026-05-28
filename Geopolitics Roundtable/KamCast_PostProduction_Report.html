@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KamCast Studios — Post-Production Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0e0e0e;
+    --surface:  #161616;
+    --border:   #2a2a2a;
+    --muted:    #3a3a3a;
+    --text:     #e8e8e8;
+    --dim:      #888;
+    --red:      #e8001c;
+    --red-dim:  #3a0008;
+    --green:    #1a7f37;
+    --green-bg: #0a2010;
+    --amber:    #b07800;
+    --amber-bg: #1e1600;
+    --mono:     'IBM Plex Mono', monospace;
+    --sans:     'IBM Plex Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    padding: 0 20px;
+  }
+  nav a {
+    display: block;
+    padding: 12px 16px;
+    color: var(--dim);
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  nav a:hover { color: var(--text); }
+  nav a.active { color: var(--red); border-bottom-color: var(--red); }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: .12em;
+    padding: 12px 16px 12px 0;
+    border-right: 1px solid var(--border);
+    margin-right: 8px;
+    white-space: nowrap;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 0 32px;
+  }
+  .header-inner { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+  .header-left h1 {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .header-left .sub {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--red);
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .header-meta {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+  .meta-cell {
+    padding: 10px 16px;
+    border-right: 1px solid var(--border);
+  }
+  .meta-cell:last-child { border-right: none; }
+  .meta-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 2px;
+  }
+  .meta-val {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* ── SECTION ── */
+  section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+  section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 6px;
+  }
+  h2 {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  h3 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin: 24px 0 10px;
+  }
+  p { color: #aaa; line-height: 1.7; margin-bottom: 12px; font-size: 13.5px; }
+
+  /* ── SEQUENCE CARDS ── */
+  .seq-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .seq-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .seq-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--red);
+  }
+  .seq-num {
+    font-family: var(--mono);
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--muted);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .seq-file {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .seq-order {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--red);
+    background: var(--red-dim);
+    padding: 2px 7px;
+    margin-bottom: 10px;
+  }
+  .seq-detail { font-size: 12px; color: var(--dim); line-height: 1.6; }
+  .seq-tc { font-family: var(--mono); font-size: 11.5px; color: #c8a800; font-weight: 600; margin-top: 8px; letter-spacing: .03em; }
+
+  /* ── TRANSITION NOTES ── */
+  .trans-grid { display: grid; grid-template-columns: 80px 1fr; gap: 0; border: 1px solid var(--border); }
+  .trans-label {
+    background: #111;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--red);
+    padding: 14px 10px;
+    text-align: center;
+    letter-spacing: .04em;
+  }
+  .trans-body { padding: 14px 16px; font-size: 13px; color: #bbb; line-height: 1.65; }
+  .trans-row:not(:last-child) { border-bottom: 1px solid var(--border); }
+
+  /* ── TIMESTAMP TABLES ── */
+  .file-block { margin-bottom: 36px; }
+  .file-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #111;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    padding: 12px 16px;
+  }
+  .file-name {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 700;
+    color: #c8a800;
+    letter-spacing: .04em;
+  }
+  .file-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    background: var(--red);
+    color: #fff;
+  }
+  .file-desc { font-size: 12px; color: var(--dim); margin-left: auto; text-align: right; }
+
+  .ts-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); }
+  .ts-table thead th {
+    background: #0a0a0a;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .ts-table tbody tr { border-bottom: 1px solid #1e1e1e; }
+  .ts-table tbody tr:hover { background: #1a1a1a; }
+  .ts-table td {
+    padding: 7px 12px;
+    font-size: 12.5px;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .tc {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: #c8a800;
+    font-weight: 600;
+    white-space: nowrap;
+    letter-spacing: .03em;
+  }
+  .content-cell { color: #bbb; }
+  .flag {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    padding: 3px 8px;
+    white-space: nowrap;
+    display: inline-block;
+  }
+  .flag-keep    { background: var(--green-bg); color: #4caf7d; border: 1px solid #1a4a2a; }
+  .flag-cut     { background: var(--red-dim);  color: #ff6b6b; border: 1px solid #4a0010; }
+  .flag-trim    { background: var(--amber-bg); color: #d4a017; border: 1px solid #3a2600; }
+
+  /* ── FILTER TABS ── */
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 12px; }
+  .filter-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--dim);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .filter-btn:hover { border-color: #555; color: var(--text); }
+  .filter-btn.active-all   { border-color: var(--text); color: var(--text); }
+  .filter-btn.active-keep  { border-color: #4caf7d; color: #4caf7d; background: var(--green-bg); }
+  .filter-btn.active-cut   { border-color: #ff6b6b; color: #ff6b6b; background: var(--red-dim); }
+  .filter-btn.active-trim  { border-color: #d4a017; color: #d4a017; background: var(--amber-bg); }
+
+  /* ── CUT LIST ── */
+  .cut-list { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); }
+  .cut-row {
+    display: grid;
+    grid-template-columns: 120px 100px 100px 1fr;
+    gap: 0;
+    border-bottom: 1px solid #1e1e1e;
+    align-items: center;
+  }
+  .cut-row:last-child { border-bottom: none; }
+  .cut-row:hover { background: #1a1a1a; }
+  .cut-row .cut-file {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: #ff6b6b;
+    padding: 10px 12px;
+    border-right: 1px solid #1e1e1e;
+  }
+  .cut-row .cut-tc {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #c8a800;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-right: 1px solid #1e1e1e;
+  }
+  .cut-row .cut-reason {
+    font-size: 12.5px;
+    color: #999;
+    padding: 10px 14px;
+  }
+  .cut-header {
+    display: grid;
+    grid-template-columns: 120px 100px 100px 1fr;
+    background: #0a0a0a;
+    border-bottom: 1px solid var(--border);
+  }
+  .cut-header span {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 8px 12px;
+  }
+
+  /* ── HIGHLIGHT CLIPS ── */
+  .clips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+  .clip-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .clip-letter {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--muted);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 28px;
+  }
+  .clip-body {}
+  .clip-duration {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--red);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .clip-file {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: #c8a800;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .clip-tc { font-family: var(--mono); font-size: 11px; color: #c8a800; font-weight: 600; margin-bottom: 6px; letter-spacing: .03em; }
+  .clip-hook { font-size: 12.5px; color: #bbb; line-height: 1.5; }
+
+  /* ── NOTES ── */
+  .notes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .note-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 18px;
+  }
+  .note-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+  .note-body { font-size: 12.5px; color: #aaa; line-height: 1.7; }
+
+  /* ── CHECKLIST ── */
+  .checklist { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); }
+  .check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid #1e1e1e;
+    cursor: pointer;
+    transition: background .1s;
+    user-select: none;
+  }
+  .check-row:last-child { border-bottom: none; }
+  .check-row:hover { background: #1a1a1a; }
+  .check-row.done { opacity: .45; }
+  .check-row.done .check-text { text-decoration: line-through; }
+  .check-box {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--muted);
+    background: transparent;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s;
+  }
+  .check-row.done .check-box {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .check-box svg { display: none; }
+  .check-row.done .check-box svg { display: block; }
+  .check-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--dim);
+    width: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .check-text { font-size: 13px; color: #bbb; }
+  .priority-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--red);
+    background: var(--red-dim);
+    padding: 1px 6px;
+    margin-left: auto;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  /* ── OVERVIEW TABLE ── */
+  .overview-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); }
+  .overview-table th {
+    background: #0a0a0a;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 9px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .overview-table td {
+    padding: 10px 14px;
+    font-size: 13px;
+    border-bottom: 1px solid #1e1e1e;
+    vertical-align: top;
+  }
+  .overview-table tr:last-child td { border-bottom: none; }
+  .overview-table tr:hover td { background: #181818; }
+  .order-num {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--red);
+  }
+  .file-mono { font-family: var(--mono); font-size: 12.5px; color: #c8a800; font-weight: 600; }
+  .tc-mono { font-family: var(--mono); font-size: 11.5px; color: #c8a800; font-weight: 600; }
+
+  /* ── UTIL ── */
+  .hidden { display: none !important; }
+  @media (max-width: 700px) {
+    .seq-grid { grid-template-columns: 1fr; }
+    .notes-grid { grid-template-columns: 1fr; }
+    .header-meta { grid-template-columns: 1fr 1fr; }
+    .cut-row { grid-template-columns: 100px 1fr; }
+    .cut-row .cut-tc:nth-child(3) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">KAMCAST</div>
+  <a href="#overview" class="active">Overview</a>
+  <a href="#sequence">Sequence</a>
+  <a href="#timestamps">Timestamps</a>
+  <a href="#cutlist">Cut List</a>
+  <a href="#highlights">Highlights</a>
+  <a href="#notes">Notes</a>
+  <a href="#checklist">Checklist</a>
+</nav>
+
+<!-- HEADER -->
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="sub">Post-Production Editorial Report</div>
+        <h1>Geopolitics Roundtable — US / Iran</h1>
+      </div>
+      <div class="header-meta">
+        <div class="meta-cell">
+          <div class="meta-label">Guests</div>
+          <div class="meta-val">Paul Hardcastle · Brett Jollof</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Total Runtime</div>
+          <div class="meta-val">~57 min (3 files)</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Date</div>
+          <div class="meta-val">May 28, 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── 01 OVERVIEW ── -->
+<section id="overview">
+  <div class="container">
+    <div class="section-label">01</div>
+    <h2>Editorial Overview</h2>
+    <p>Raw, unscripted roundtable covering the US-Iran military conflict, nuclear geopolitics, Sunni-Shia divide, Hezbollah, Canadian gas prices, Trump's foreign policy motives, and propaganda on both sides. Candid, informed, occasionally profane. Recorded across three DJI camera files with a brief off-camera break in File 2.</p>
+    <p><strong style="color:#e8e8e8">Recommended cut:</strong> Full episode 45–50 min after removing dead air and false starts. Short-form highlight cut 8–12 min using clips in Section 05.</p>
+
+    <h3>Files at a Glance</h3>
+    <table class="overview-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>File</th>
+          <th>Raw Duration</th>
+          <th>Segment Focus</th>
+          <th>Key Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="order-num">1</span></td>
+          <td><span class="file-mono">DJI_Main_2</span></td>
+          <td><span class="tc-mono">~19 min 35 sec</span></td>
+          <td>Intro + Iraq parallels + oil / peace deal</td>
+          <td style="color:#d4a017">Trim intro rehearsals — START at 00;08;12;45</td>
+        </tr>
+        <tr>
+          <td><span class="order-num">2</span></td>
+          <td><span class="file-mono">DJI_Main_1</span></td>
+          <td><span class="tc-mono">~19 min 51 sec</span></td>
+          <td>US goals, Shia-Sunni, Iran proxy network</td>
+          <td style="color:#d4a017">Cut mine-scatter ramble (~10:02–10:43)</td>
+        </tr>
+        <tr>
+          <td><span class="order-num">3</span></td>
+          <td><span class="file-mono">DJI_Main_3</span></td>
+          <td><span class="tc-mono">~13 min 42 sec</span></td>
+          <td>Superpowers, Trump motives, wrap</td>
+          <td style="color:#4caf7d">Trim to clean outro at 00;13;41;15</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── 02 SEQUENCE ── -->
+<section id="sequence">
+  <div class="container">
+    <div class="section-label">02</div>
+    <h2>Edit Sequence & File Order</h2>
+    <p>The files were <strong style="color:#fff">NOT recorded in narrative order.</strong> DJI_Main_2 contains the show intro at 08:12 and must go FIRST. Main_1 and Main_3 follow numerically.</p>
+
+    <div class="seq-grid">
+      <div class="seq-card">
+        <div class="seq-num">01</div>
+        <div class="seq-order">First</div>
+        <div class="seq-file">DJI_Main_2</div>
+        <div class="seq-detail">
+          Host intro, Iraq/WMD parallels, executions, Hezbollah, gas prices, peace deal.<br>
+          <strong style="color:#e8e8e8">Cut</strong> everything before 00;08;12;45 (SD card swap, Starbucks tangent, false starts).
+        </div>
+        <div class="seq-tc">IN: 00;08;12;45 → OUT: 00;19;35;00<br>~11 min 22 sec used</div>
+      </div>
+      <div class="seq-card">
+        <div class="seq-num">02</div>
+        <div class="seq-order">Second</div>
+        <div class="seq-file">DJI_Main_1</div>
+        <div class="seq-detail">
+          Iran infrastructure collapse, US goals, Shia-Sunni history, proxy states (Hamas / Hezbollah / Houthis), October 7th context.
+        </div>
+        <div class="seq-tc">IN: 00;00;00;09 → OUT: 00;19;51;18<br>~19 min 51 sec (trim mine ramble)</div>
+      </div>
+      <div class="seq-card">
+        <div class="seq-num">03</div>
+        <div class="seq-order">Last</div>
+        <div class="seq-file">DJI_Main_3</div>
+        <div class="seq-detail">
+          Superpower dynamics, Pakistan-India standoff, Trump motives, propaganda both sides, nuclear rights moral question. Clean wrap.
+        </div>
+        <div class="seq-tc">IN: 00;00;00;07 → OUT: 00;13;42;05<br>~13 min 42 sec full</div>
+      </div>
+    </div>
+
+    <h3>Transition Notes</h3>
+    <div class="trans-grid">
+      <div class="trans-row" style="display:contents">
+        <div class="trans-label" style="border-bottom:1px solid var(--border)">CUT<br>1 → 2</div>
+        <div class="trans-body" style="border-bottom:1px solid var(--border)">File 2 ends mid-conversation (gas prices / peace deal). File 1 picks up on Iran's military capabilities. Use a <strong style="color:#e8e8e8">0.5s audio crossfade or J-cut</strong> to smooth the join. Add chapter card: <em style="color:#aaa">"PART 1 — THE CONFLICT"</em></div>
+      </div>
+      <div class="trans-row" style="display:contents">
+        <div class="trans-label">CUT<br>2 → 3</div>
+        <div class="trans-body">File 1 ends on Israel/October 7th context. File 3 opens on superpower dynamics. Flows naturally — <strong style="color:#e8e8e8">hard cut works</strong>. Optional chapter card: <em style="color:#aaa">"PART 2 — THE BIG PICTURE"</em></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 03 TIMESTAMPS ── -->
+<section id="timestamps">
+  <div class="container">
+    <div class="section-label">03</div>
+    <h2>Timestamp-by-Timestamp Breakdown</h2>
+
+    <div class="filter-bar">
+      <button class="filter-btn active-all" onclick="filterRows('all')">All</button>
+      <button class="filter-btn" onclick="filterRows('keep')">Keep</button>
+      <button class="filter-btn" onclick="filterRows('cut')">Cut</button>
+      <button class="filter-btn" onclick="filterRows('trim')">Trim</button>
+    </div>
+
+    <!-- FILE 2 -->
+    <div class="file-block">
+      <div class="file-header">
+        <span class="file-name">DJI_Main_2</span>
+        <span class="file-badge">Edit Order #1</span>
+        <span class="file-desc">Raw ~19m 35s · Start at 00;08;12;45</span>
+      </div>
+      <table class="ts-table">
+        <thead><tr><th>TC In</th><th>TC Out</th><th>Content</th><th>Flag</th></tr></thead>
+        <tbody id="tbody-f2">
+          <tr data-flag="trim"><td class="tc">00;00;00;07</td><td class="tc">00;00;19;15</td><td class="content-cell">Pre-intro — WMD/Iraq discussion. No clean in-point. Mid-sentence.</td><td><span class="flag flag-trim">TRIM</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;00;19;20</td><td class="tc">00;00;48;59</td><td class="content-cell">Iraq leadership comparison. Trump-era brutality discussion.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;00;49;04</td><td class="tc">00;01;06;38</td><td class="content-cell">Executions tangent — Iran / Israel / USA comparison.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;01;06;43</td><td class="tc">00;01;23;03</td><td class="content-cell">Daily executions in China / Iran — government protesters killed.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;01;23;08</td><td class="tc">00;01;34;34</td><td class="content-cell">Iran executes alleged Israeli informants.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;01;34;39</td><td class="tc">00;01;56;47</td><td class="content-cell">Entertaining the idea they were guilty — death penalty logic.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;01;56;49</td><td class="tc">00;02;16;43</td><td class="content-cell">US assassination attempt compare — imprisonment vs public execution.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;02;16;46</td><td class="tc">00;02;39;20</td><td class="content-cell">Fear and submission through brutal executions — regime logic.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;02;39;22</td><td class="tc">00;03;03;41</td><td class="content-cell">Symbolic executions as deterrent. Death penalty for anything.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;03;03;43</td><td class="tc">00;03;17;31</td><td class="content-cell">Iran funds terrorist proxies — Lebanon / Hezbollah context.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;03;17;36</td><td class="tc">00;03;38;58</td><td class="content-cell">Israel vs Lebanon — Hezbollah as minority in a civilian country.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;03;38;58</td><td class="tc">00;04;04;01</td><td class="content-cell">Israel's role — every Middle East war involves a terrorist proxy — Hezbollah framing.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;04;04;06</td><td class="tc">00;04;31;26</td><td class="content-cell">Iran as Middle East superpower funding arms across region.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;04;31;35</td><td class="tc">00;04;53;53</td><td class="content-cell">Hezbollah — minority of Lebanon, heavily armed and organized.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;04;54;00</td><td class="tc">00;05;18;53</td><td class="content-cell">Tunnel networks, kidnapping — Hezbollah organization structure.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="cut"><td class="tc">00;05;18;56</td><td class="tc">00;05;31;52</td><td class="content-cell">Crosstalk / someone leaving — incomplete sentence, dead air.</td><td><span class="flag flag-cut">CUT</span></td></tr>
+          <tr data-flag="cut"><td class="tc">00;05;31;57</td><td class="tc">00;05;36;57</td><td class="content-cell">Recording pause — "one second".</td><td><span class="flag flag-cut">CUT</span></td></tr>
+          <tr data-flag="cut"><td class="tc">00;05;37;02</td><td class="tc">00;05;48;25</td><td class="content-cell">SD card change — off-camera chatter.</td><td><span class="flag flag-cut">CUT</span></td></tr>
+          <tr data-flag="cut"><td class="tc">00;05;48;30</td><td class="tc">00;06;29;19</td><td class="content-cell">Technical dead air — full cut.</td><td><span class="flag flag-cut">CUT</span></td></tr>
+          <tr data-flag="cut"><td class="tc">00;06;29;24</td><td class="tc">00;06;40;04</td><td class="content-cell">Starbucks drink joke — off-topic banter.</td><td><span class="flag flag-cut">CUT</span></td></tr>
+          <tr data-flag="cut"><td class="tc">00;06;40;09</td><td class="tc">00;06;58;37</td><td class="content-cell">Copyright joke / profanity — off-topic banter.</td><td><span class="flag flag-cut">CUT</span></td></tr>
+          <tr data-flag="cut"><td class="tc">00;06;58;42</td><td class="tc">00;07;21;49</td><td class="content-cell">Starbucks red cups controversy tangent.</td><td><span class="flag flag-cut">CUT</span></td></tr>
+          <tr data-flag="cut"><td class="tc">00;07;21;54</td><td class="tc">00;07;40;57</td><td class="content-cell">Starbucks boycott 2023 story continued.</td><td><span class="flag flag-cut">CUT</span></td></tr>
+          <tr data-flag="cut"><td class="tc">00;07;41;07</td><td class="tc">00;08;03;51</td><td class="content-cell">Starbucks / funding controversy concluded.</td><td><span class="flag flag-cut">CUT</span></td></tr>
+          <tr data-flag="trim"><td class="tc">00;08;03;55</td><td class="tc">00;08;12;44</td><td class="content-cell">"And action. Okay." — rolling into intro. Trim to clean start.</td><td><span class="flag flag-trim">TRIM</span></td></tr>
+          <tr data-flag="keep" style="background:#0d1a0d"><td class="tc">00;08;12;45</td><td class="tc">00;08;42;58</td><td class="content-cell"><strong style="color:#4caf7d">★ START EDIT HERE</strong> — Host intro: "Welcome to another episode of KamCast Studios. Today we have Paul Hardcastle and Brett Jollof."</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;08;43;03</td><td class="tc">00;09;00;58</td><td class="content-cell">Host sets format — "when conversation gets interesting, we start."</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="cut"><td class="tc">00;09;01;03</td><td class="tc">00;09;06;29</td><td class="content-cell">"I'll do that again." — false start.</td><td><span class="flag flag-cut">CUT</span></td></tr>
+          <tr data-flag="trim"><td class="tc">00;09;06;34</td><td class="tc">00;09;13;55</td><td class="content-cell">Short incomplete response clip.</td><td><span class="flag flag-trim">TRIM</span></td></tr>
+          <tr data-flag="cut"><td class="tc">00;09;14;00</td><td class="tc">00;09;18;55</td><td class="content-cell">Another false start — cut.</td><td><span class="flag flag-cut">CUT</span></td></tr>
+          <tr data-flag="cut"><td class="tc">00;09;19;00</td><td class="tc">00;09;26;04</td><td class="content-cell">Third false start — "are you guys caught up?"</td><td><span class="flag flag-cut">CUT</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;09;26;09</td><td class="tc">00;09;52;12</td><td class="content-cell">Host frames episode — US/Iran peace deal, Trump rejection. Strong open after intro.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;09;52;17</td><td class="tc">00;10;18;18</td><td class="content-cell">Gas prices rising, global economy — Trump says no to peace.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;10;18;23</td><td class="tc">00;10;33;12</td><td class="content-cell">Why not accept the deal — average guy POV.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;10;33;17</td><td class="tc">00;11;02;28</td><td class="content-cell">Canadian gas prices — $1.75 to $1.99/L in Ottawa. Carbon tax tangent.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;11;02;34</td><td class="tc">00;11;24;05</td><td class="content-cell">Carbon tax breakdown — over 50% of pump price is government tax.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;11;24;08</td><td class="tc">00;11;46;07</td><td class="content-cell">Carbon tax removed — gas dipped briefly then returned. Oil market response.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;11;46;09</td><td class="tc">00;12;09;48</td><td class="content-cell">Strait of Hormuz hostage situation — oil supply choke point.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;12;09;50</td><td class="tc">00;12;45;07</td><td class="content-cell">Working class suffering from gas prices — no end in sight.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;12;45;10</td><td class="tc">00;13;16;36</td><td class="content-cell">Why didn't Trump accept the deal? Multi-player peace complexity.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;13;16;41</td><td class="tc">00;13;50;03</td><td class="content-cell">Average guy perspective — just wants peace and a good life.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;13;50;07</td><td class="tc">00;14;27;12</td><td class="content-cell">Why now? Netanyahu warning since 1995 — always 20% away from nukes. Never stopped.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;14;27;14</td><td class="tc">00;14;49;56</td><td class="content-cell">Maybe Iran wanted nukes for defense. Who decides who can have them?</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;14;49;58</td><td class="tc">00;15;13;35</td><td class="content-cell">US / Pakistan / Israel all have nukes. Why not Iran? Real motivations questioned.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;15;13;37</td><td class="tc">00;15;36;57</td><td class="content-cell">Speaker's real theory: US went in to control oil, not stop nukes.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;15;37;02</td><td class="tc">00;16;03;57</td><td class="content-cell">US underestimated Strait of Hormuz closure. Nuclear framing may be post-hoc justification.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;16;03;59</td><td class="tc">00;16;31;05</td><td class="content-cell">WMD argument — if US has them, what gives them the right to deny Iran?</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;16;31;05</td><td class="tc">00;16;49;42</td><td class="content-cell">Iran deemed too violent to have nukes. Current standoff: nobody pressing the button.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;16;49;42</td><td class="tc">00;17;19;01</td><td class="content-cell">Operation Hammer — US struck facilities reportedly 2 weeks from completing nukes.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;17;19;04</td><td class="tc">00;17;46;45</td><td class="content-cell">October 7th as key reference point — Islamic Republic funded Hamas civilian attacks.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;17;46;48</td><td class="tc">00;18;06;24</td><td class="content-cell">Iran attacked 5-6 countries simultaneously when struck — fractured command structure.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;18;06;27</td><td class="tc">00;18;34;56</td><td class="content-cell">Iran not cohesive — divided post-leadership strikes. Who's actually in charge?</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;18;34;58</td><td class="tc">00;18;53;52</td><td class="content-cell">Islamic Republic leadership: religiously motivated, no clear singular authority.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;18;54;02</td><td class="tc">00;19;15;45</td><td class="content-cell">Iran's three demands: uranium enrichment, Strait of Hormuz, full US military withdrawal.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;19;15;48</td><td class="tc">00;19;34;56</td><td class="content-cell">Iran has no cards — military decimated. Not in position to be making demands.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;19;35;01</td><td class="tc">00;19;50;41</td><td class="content-cell">End of File 2. Flows naturally into File 1 (crossfade here).</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FILE 1 -->
+    <div class="file-block">
+      <div class="file-header">
+        <span class="file-name">DJI_Main_1</span>
+        <span class="file-badge">Edit Order #2</span>
+        <span class="file-desc">Raw ~19m 51s · Trim mine ramble at 10:02</span>
+      </div>
+      <table class="ts-table">
+        <thead><tr><th>TC In</th><th>TC Out</th><th>Content</th><th>Flag</th></tr></thead>
+        <tbody id="tbody-f1">
+          <tr data-flag="keep"><td class="tc">00;00;00;09</td><td class="tc">00;00;23;13</td><td class="content-cell">US disclosed Iran's infrastructure collapse — water, power, bridges near gone.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;00;23;15</td><td class="tc">00;00;53;47</td><td class="content-cell">US doesn't want to conquer Iran — wants to reform it as a positive world player.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;00;53;49</td><td class="tc">00;01;17;54</td><td class="content-cell">Iran has no tourism, no exports besides oil. No culture — only known as terrorists.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;01;18;04</td><td class="tc">00;01;42;21</td><td class="content-cell">Removing the threat = changing Iran's direction. New leadership wave — what does that look like?</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;01;42;24</td><td class="tc">00;02;05;14</td><td class="content-cell">Factions — who are they negotiating with? Son reportedly more hardline than father.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;02;05;17</td><td class="tc">00;02;36;37</td><td class="content-cell">Factions coordinating strikes — religion as unifying force. Iranians follow Shia, not mainstream.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;02;36;40</td><td class="tc">00;02;57;47</td><td class="content-cell">Shia vs Sunni — Iran is Shia. Different ideology than mainstream Islam globally.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;02;57;47</td><td class="tc">00;03;22;31</td><td class="content-cell">History of Shia-Sunni split — after Muhammad's death, leadership dispute erupted.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;03;22;33</td><td class="tc">00;03;44;10</td><td class="content-cell">The Great Divide — two sects formed. Political powers in Arabia got involved.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;03;44;15</td><td class="tc">00;04;04;18</td><td class="content-cell">Sunni worldwide, Shia dominant in Iran. The two major sects of Islam.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;04;04;20</td><td class="tc">00;04;26;12</td><td class="content-cell">Religion doesn't unite all — Iran has bombed other Muslim countries.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;04;26;12</td><td class="tc">00;04;55;45</td><td class="content-cell">Islamic Republic weaves religion into rule — extremists co-opt religion to serve ideology.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;04;55;46</td><td class="tc">00;05;18;24</td><td class="content-cell">Religion ≠ extremism — most Muslims don't want world domination.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;05;18;27</td><td class="tc">00;05;47;42</td><td class="content-cell">Extreme groups use ideology, stretch religion. Minority funded and amplified.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;05;47;44</td><td class="tc">00;06;11;18</td><td class="content-cell">How many true extremists exist in Iran? Unknown. Not disclosed. Not a majority.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;06;11;23</td><td class="tc">00;06;40;57</td><td class="content-cell">Extremism is minority — but collectively funded by other extremist groups. Death to US narrative.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;06;41;02</td><td class="tc">00;07;02;17</td><td class="content-cell">Iran calls US "Great Satan" — genuinely believe US wants to eliminate them.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;07;02;17</td><td class="tc">00;07;26;10</td><td class="content-cell">Iran has never bombed the US. They don't have the range. Working on it.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;07;26;13</td><td class="tc">00;07;42;05</td><td class="content-cell">If Iran had full capability — Israel first, then expand. Proxy control of Middle East.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;07;42;14</td><td class="tc">00;07;59;52</td><td class="content-cell">Proxy nations surrounding region: Hamas (Gaza), Hezbollah (Lebanon), Houthis (Yemen).</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;07;59;59</td><td class="tc">00;08;22;36</td><td class="content-cell">Iran wants US out of Middle East — would have greater regional influence without them.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;08;22;40</td><td class="tc">00;08;49;55</td><td class="content-cell">Perspective flip — what if UAE had a navy near US shores? Americans would want them out too.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;08;50;07</td><td class="tc">00;09;17;52</td><td class="content-cell">Iran funding proxies — Yemen/Houthis, Lebanon/Hezbollah, Hamas. Attempted regional control.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;09;17;55</td><td class="tc">00;09;41;32</td><td class="content-cell">Iran's oil revenue cut. Blockade targeting Iranian ports only — rest of strait unaffected.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;09;41;34</td><td class="tc">00;10;02;47</td><td class="content-cell">Iran's navy reduced to attack boats similar to Somali pirates. Mines swept from strait.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="trim"><td class="tc">00;10;02;52</td><td class="tc">00;10;20;15</td><td class="content-cell">Mine locations unknown — scattered, no coordination. Each faction firing independently. Loses thread.</td><td><span class="flag flag-trim">TRIM</span></td></tr>
+          <tr data-flag="trim"><td class="tc">00;10;20;15</td><td class="tc">00;10;43;21</td><td class="content-cell">Rambling — disorganized ops argument continues. Repetitive. Cut or heavily trim.</td><td><span class="flag flag-trim">TRIM</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;10;43;21</td><td class="tc">00;11;04;48</td><td class="content-cell">US expected Iranian people to overthrow their own government. It didn't happen.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;11;04;50</td><td class="tc">00;11;24;09</td><td class="content-cell">Exiled prince — insisted people would overthrow. Still possibly could. Miscalculation.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;11;24;10</td><td class="tc">00;11;43;41</td><td class="content-cell">Prince exiled — people celebrated his exit. Under Islamic Republic: conform or be murdered.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;11;43;41</td><td class="tc">00;11;59;37</td><td class="content-cell">Average citizens find middle ground for survival. Not extreme either way.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;11;59;37</td><td class="tc">00;12;28;49</td><td class="content-cell">Brainwashed under terrorist regime. How do we get out? Why are we even involved?</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;12;28;51</td><td class="tc">00;12;54;14</td><td class="content-cell">Israel called on US after Oct 7 — "you've got the might, we've got the will." Overthrow plan.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;12;54;14</td><td class="tc">00;13;19;57</td><td class="content-cell">Trump thought it'd be over in a day. It wasn't. Long wars require long resources.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;13;19;57</td><td class="tc">00;13;48;34</td><td class="content-cell">US essentially wrapped it militarily fast — but now stalled on actual regime change.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;13;48;39</td><td class="tc">00;14;08;37</td><td class="content-cell">Iran down to 15% missile reserves. No navy, no air force. Some Russian backing remains.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;14;08;41</td><td class="tc">00;14;25;50</td><td class="content-cell">Afghanistan comparison — "almost done" for 10 years. This is only two months in.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;14;25;50</td><td class="tc">00;14;42;54</td><td class="content-cell">Iran's choice: surrender or not. Refusing. Proposals pushed, counter-proposals weak.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;14;43;08</td><td class="tc">00;15;06;06</td><td class="content-cell">Worry about Trump threatening annihilation. Is he serious about using nuclear capability?</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;15;06;06</td><td class="tc">00;15;35;52</td><td class="content-cell">Trump hints at brutal force — "for what?" Most Iranian capability already knocked out.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;15;35;55</td><td class="tc">00;16;00;57</td><td class="content-cell">Strategy = dominate the dominant. US making Iran smaller and weaker every day.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;16;00;57</td><td class="tc">00;16;22;03</td><td class="content-cell">"The Shriveling of Iran" — $5M/day in lost oil profits. Wells backing up, can't sell.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;16;22;03</td><td class="tc">00;16;40;12</td><td class="content-cell">Statistically US winning by a mile. Statistically Iran's population should have overthrown already.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;16;40;16</td><td class="tc">00;16;58;06</td><td class="content-cell">But it's not happening. Don't fully trust US-sourced statistics on this.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;16;58;06</td><td class="tc">00;17;29;39</td><td class="content-cell">If US left today — Iran would take 15 years to rebuild. Regime change is the actual goal.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;17;29;39</td><td class="tc">00;17;49;57</td><td class="content-cell">Waiting for leadership to give in. US hardline position: no nuclear, no deal.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;17;49;59</td><td class="tc">00;18;09;33</td><td class="content-cell">Iran and US nowhere near each other. Ceasefire holding. Obliteration would shame the US.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;18;09;38</td><td class="tc">00;18;32;22</td><td class="content-cell">Obliterating Iran = survivors become perfect anti-US narrative. Nobody wins the optics.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;18;32;22</td><td class="tc">00;18;50;24</td><td class="content-cell">What US did to Venezuela and Iran — they can do to anyone. That's what scares the world.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;18;50;26</td><td class="tc">00;19;14;07</td><td class="content-cell">Who checks the US? Who holds them accountable? Rule of law is eroding globally.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;19;14;10</td><td class="tc">00;19;36;32</td><td class="content-cell">When rule of law is ignored — what stops bigger powers from doing whatever they want?</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="trim"><td class="tc">00;19;36;37</td><td class="tc">00;19;51;18</td><td class="content-cell">Cuts off mid-thought. End of File 1. Trim to clean bridge into File 3.</td><td><span class="flag flag-trim">TRIM</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FILE 3 -->
+    <div class="file-block">
+      <div class="file-header">
+        <span class="file-name">DJI_Main_3</span>
+        <span class="file-badge">Edit Order #3</span>
+        <span class="file-desc">Raw ~13m 42s · Final segment, clean wrap</span>
+      </div>
+      <table class="ts-table">
+        <thead><tr><th>TC In</th><th>TC Out</th><th>Content</th><th>Flag</th></tr></thead>
+        <tbody id="tbody-f3">
+          <tr data-flag="keep"><td class="tc">00;00;00;07</td><td class="tc">00;00;20;10</td><td class="content-cell">Four superpowers keeping each other in check. US stopping China on Taiwan. Nuclear balance of power.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;00;20;10</td><td class="tc">00;00;48;52</td><td class="content-cell">Without checks — someone pushes the button. Iran probably shouldn't have nukes — likely would use them.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;00;48;52</td><td class="tc">00;01;13;42</td><td class="content-cell">Nuclear nightmare scenario. Iran's stated mission = eliminating Israel. Not a defensive posture.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;01;13;45</td><td class="tc">00;01;23;42</td><td class="content-cell">But Israel bombed them first — Middle East cycle of retaliation goes both ways.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;01;23;46</td><td class="tc">00;01;44;57</td><td class="content-cell">Go back to 1946 — decades of mistrust built between many countries. Not a recent conflict.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;01;45;00</td><td class="tc">00;02;03;00</td><td class="content-cell">Iran/Israel conflict ongoing through all of the 2000s. Each calls the other the terrorist.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;02;03;00</td><td class="tc">00;02;39;08</td><td class="content-cell">US involvement = US gets the terrorist label from Iran's POV. If Iran were a US ally — flip the narrative entirely.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;02;39;08</td><td class="tc">00;03;01;58</td><td class="content-cell">If US was against Israel — Israel would be "the worst of the worst." Framing is determined by alliance.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;03;02;05</td><td class="tc">00;03;20;34</td><td class="content-cell">US as strongman. Americans ask why we're there. "Greatest ally" becomes WMD justification.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;03;20;35</td><td class="tc">00;03;42;13</td><td class="content-cell">Neighboring countries also have WMDs. Pakistan has nuclear weapons — India conflict ongoing.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;03;42;20</td><td class="tc">00;04;01;39</td><td class="content-cell">Pakistan/India nuclear standoff. Nobody talks about it. Trump takes credit for de-escalation.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;04;01;44</td><td class="tc">00;04;30;18</td><td class="content-cell">India/Pakistan aircraft conflict last year — not nuclear but two nuclear nations at war. Worrying.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;04;30;21</td><td class="tc">00;04;53;22</td><td class="content-cell">Superpowers all have nukes. None act. Mutual destruction risk keeps everyone in check.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;04;53;27</td><td class="tc">00;05;27;19</td><td class="content-cell">Iran conflict byproduct = world markets in chaos. Gas prices the most visible frontline impact.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="trim"><td class="tc">00;05;27;20</td><td class="tc">00;05;31;16</td><td class="content-cell">Short trailing incomplete comment — trim to next clean line.</td><td><span class="flag flag-trim">TRIM</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;05;31;21</td><td class="tc">00;05;56;10</td><td class="content-cell">Iran must submit to US demands — only real path to peace? Both sides operating from different ideologies.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;05;56;10</td><td class="tc">00;06;19;03</td><td class="content-cell">Trump: "not leaving and going back in 3 years." Wants a finalized, permanent outcome.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;06;19;06</td><td class="tc">00;06;46;42</td><td class="content-cell">Venezuela analogy — Trump's military decisions led to beneficial trade deal, commercial flights resumed after 7 years.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;06;46;50</td><td class="tc">00;07;06;21</td><td class="content-cell">2 million Iranians fled country due to conditions. Same post-conflict reconnection possible as Venezuela.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;07;06;24</td><td class="tc">00;07;28;10</td><td class="content-cell">Women's rights in Iran — acid attacks for visible hair. Horrific human rights abuses documented.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;07;28;13</td><td class="tc">00;07;47;19</td><td class="content-cell">Counter — YouTube food tour videos from Iran show relatively normal everyday life.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;07;47;19</td><td class="tc">00;08;06;31</td><td class="content-cell">Internet down in Iran. Western YouTubers visit, return to publish. US sources could be propaganda too.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;08;06;34</td><td class="tc">00;08;11;57</td><td class="content-cell">US tourists accepted even in Iran's sensitive times.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;08;12;02</td><td class="tc">00;08;39;35</td><td class="content-cell">Two-dimensional view of the enemy. "Best of Our Food" show visited Afghanistan — found normal people.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;08;39;39</td><td class="tc">00;09;00;18</td><td class="content-cell">US propaganda — Marines humiliating Iranian POWs on ships. Normal people posting normal content too.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;09;00;22</td><td class="tc">00;09;22;40</td><td class="content-cell">Trump wants to rule like Putin. Good salesman. Administration of yes-men around him.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;09;22;40</td><td class="tc">00;09;51;34</td><td class="content-cell">Trump attacking citizens' rights since 2016. More organized this term. Attacking from the inside.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;09;51;34</td><td class="tc">00;10;15;56</td><td class="content-cell">Trump enriching himself and family. Ran on no-war platform — now in a war.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;10;15;56</td><td class="tc">00;10;53;23</td><td class="content-cell">History of US in Middle East — none of those countries became better. Why get involved again?</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;10;53;37</td><td class="tc">00;11;21;25</td><td class="content-cell">Unclear US goal — back and forth for 2 months. Only stated goal: stop Iran getting nukes.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;11;21;35</td><td class="tc">00;11;47;09</td><td class="content-cell">Agreed — no country should have nukes. But how do you enforce that fairly across all nations?</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="trim"><td class="tc">00;11;47;14</td><td class="tc">00;11;57;52</td><td class="content-cell">Trails off on Israel needs/doesn't need help. Incomplete — cut or tighten.</td><td><span class="flag flag-trim">TRIM</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;11;57;56</td><td class="tc">00;12;27;20</td><td class="content-cell">US domestic mess — JFK files, ICE brutality, millionaire tax breaks, election rigging accusations.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;12;27;20</td><td class="tc">00;12;47;48</td><td class="content-cell">Trying to fix other countries while your own country is falling apart.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;12;47;50</td><td class="tc">00;13;16;43</td><td class="content-cell">From outside — US looks great. Is foreign war a distraction from domestic chaos?</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep" style="background:#0d1a0d"><td class="tc">00;13;16;48</td><td class="tc">00;13;41;10</td><td class="content-cell"><strong style="color:#4caf7d">★ STRONG CLOSE</strong> — What gives the US the right to say Iran can't have nukes when the US has them? Moral closing question.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+          <tr data-flag="keep"><td class="tc">00;13;41;15</td><td class="tc">00;13;42;05</td><td class="content-cell">"All right." — Show end. Clean out point.</td><td><span class="flag flag-keep">KEEP</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── 04 CUT LIST ── -->
+<section id="cutlist">
+  <div class="container">
+    <div class="section-label">04</div>
+    <h2>Master Cut List</h2>
+    <p>Everything below gets removed. Estimated time cut: <strong style="color:#fff">~8–10 minutes.</strong></p>
+
+    <div class="cut-list">
+      <div class="cut-header">
+        <span>File</span>
+        <span>TC In</span>
+        <span>TC Out</span>
+        <span>Reason</span>
+      </div>
+      <div class="cut-row"><div class="cut-file">DJI_Main_2</div><div class="cut-tc">00;00;00;07</div><div class="cut-tc">00;00;19;15</div><div class="cut-reason">Pre-intro — no clean open, mid-sentence</div></div>
+      <div class="cut-row"><div class="cut-file">DJI_Main_2</div><div class="cut-tc">00;05;18;56</div><div class="cut-tc">00;05;31;52</div><div class="cut-reason">Crosstalk / someone leaving — dead air</div></div>
+      <div class="cut-row"><div class="cut-file">DJI_Main_2</div><div class="cut-tc">00;05;31;57</div><div class="cut-tc">00;05;36;57</div><div class="cut-reason">Recording pause — "one second"</div></div>
+      <div class="cut-row"><div class="cut-file">DJI_Main_2</div><div class="cut-tc">00;05;37;02</div><div class="cut-tc">00;05;48;25</div><div class="cut-reason">SD card swap — off-camera chatter</div></div>
+      <div class="cut-row"><div class="cut-file">DJI_Main_2</div><div class="cut-tc">00;05;48;30</div><div class="cut-tc">00;06;29;19</div><div class="cut-reason">Technical dead air — full cut (~41 sec)</div></div>
+      <div class="cut-row"><div class="cut-file">DJI_Main_2</div><div class="cut-tc">00;06;29;24</div><div class="cut-tc">00;08;03;51</div><div class="cut-reason">Starbucks tangent + all banter — full cut (~1 min 34 sec)</div></div>
+      <div class="cut-row"><div class="cut-file">DJI_Main_2</div><div class="cut-tc">00;08;03;55</div><div class="cut-tc">00;08;12;44</div><div class="cut-reason">"And action. Okay." — rolling into intro, trim</div></div>
+      <div class="cut-row"><div class="cut-file">DJI_Main_2</div><div class="cut-tc">00;09;01;03</div><div class="cut-tc">00;09;26;08</div><div class="cut-reason">Three false starts on intro — cut all</div></div>
+      <div class="cut-row"><div class="cut-file">DJI_Main_1</div><div class="cut-tc">00;10;02;52</div><div class="cut-tc">00;10;43;21</div><div class="cut-reason">Mine locations ramble — loses thread, repetitive</div></div>
+      <div class="cut-row"><div class="cut-file">DJI_Main_1</div><div class="cut-tc">00;19;36;37</div><div class="cut-tc">00;19;51;18</div><div class="cut-reason">Trailing mid-thought at file end — trim to clean bridge</div></div>
+      <div class="cut-row"><div class="cut-file">DJI_Main_3</div><div class="cut-tc">00;05;27;20</div><div class="cut-tc">00;05;31;16</div><div class="cut-reason">Short trailing incomplete comment</div></div>
+      <div class="cut-row"><div class="cut-file">DJI_Main_3</div><div class="cut-tc">00;11;47;14</div><div class="cut-tc">00;11;57;52</div><div class="cut-reason">Israel tangent trails off — cut or tighten</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 05 HIGHLIGHTS ── -->
+<section id="highlights">
+  <div class="container">
+    <div class="section-label">05</div>
+    <h2>Highlight Clips — Short-Form / Social</h2>
+    <p>Seven standalone clips under 3 minutes. Minimal context needed. Good for reels, trailers, YouTube shorts.</p>
+
+    <div class="clips-grid">
+      <div class="clip-card">
+        <div class="clip-letter">A</div>
+        <div class="clip-body">
+          <div class="clip-duration">~1 min 40 sec</div>
+          <div class="clip-file">DJI_Main_2 · Edit #1</div>
+          <div class="clip-tc">00;08;12;45 → 00;09;52;12</div>
+          <div class="clip-hook">Host intro + Iran peace deal framing. Perfect cold open for any cut.</div>
+        </div>
+      </div>
+      <div class="clip-card">
+        <div class="clip-letter">B</div>
+        <div class="clip-body">
+          <div class="clip-duration">~57 sec</div>
+          <div class="clip-file">DJI_Main_2 · Edit #1</div>
+          <div class="clip-tc">00;16;49;42 → 00;17;46;45</div>
+          <div class="clip-hook">Operation Hammer — nukes reportedly 2 weeks from completion. High drama, punchy.</div>
+        </div>
+      </div>
+      <div class="clip-card">
+        <div class="clip-letter">C</div>
+        <div class="clip-body">
+          <div class="clip-duration">~1 min 28 sec</div>
+          <div class="clip-file">DJI_Main_1 · Edit #2</div>
+          <div class="clip-tc">00;02;57;47 → 00;04;26;12</div>
+          <div class="clip-hook">Shia-Sunni split explained cleanly. Educational, quotable, no prior context needed.</div>
+        </div>
+      </div>
+      <div class="clip-card">
+        <div class="clip-letter">D</div>
+        <div class="clip-body">
+          <div class="clip-duration">~39 sec</div>
+          <div class="clip-file">DJI_Main_1 · Edit #2</div>
+          <div class="clip-tc">00;16;00;57 → 00;16;40;12</div>
+          <div class="clip-hook">"The Shriveling of Iran" — $5M/day lost. Stat-heavy, punchy, short.</div>
+        </div>
+      </div>
+      <div class="clip-card">
+        <div class="clip-letter">E</div>
+        <div class="clip-body">
+          <div class="clip-duration">~58 sec</div>
+          <div class="clip-file">DJI_Main_3 · Edit #3</div>
+          <div class="clip-tc">00;02;03;00 → 00;03;01;58</div>
+          <div class="clip-hook">"If Iran were our ally..." — narrative flip. Mindblowing logic. High engagement potential. Recommended thumbnail still.</div>
+        </div>
+      </div>
+      <div class="clip-card">
+        <div class="clip-letter">F</div>
+        <div class="clip-body">
+          <div class="clip-duration">~51 sec</div>
+          <div class="clip-file">DJI_Main_3 · Edit #3</div>
+          <div class="clip-tc">00;09;00;22 → 00;09;51;34</div>
+          <div class="clip-hook">Trump as Putin analogy. Hot take. Very shareable, controversial, discussion-starter.</div>
+        </div>
+      </div>
+      <div class="clip-card">
+        <div class="clip-letter">G</div>
+        <div class="clip-body">
+          <div class="clip-duration">~24 sec</div>
+          <div class="clip-file">DJI_Main_3 · Edit #3</div>
+          <div class="clip-tc">00;13;16;48 → 00;13;41;10</div>
+          <div class="clip-hook">Closing moral question — "what gives the US the right?" Strong outro for full episode and standalone.</div>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:14px; font-size:12px; color:#555;">Social delivery: vertical 9:16 crop versions recommended for Clips A, D, F, G.</p>
+  </div>
+</section>
+
+<!-- ── 06 NOTES ── -->
+<section id="notes">
+  <div class="container">
+    <div class="section-label">06</div>
+    <h2>Editor's Notes</h2>
+    <div class="notes-grid">
+      <div class="note-card">
+        <div class="note-title">Audio</div>
+        <div class="note-body">Check level consistency across the SD card recording break in File 2 (05:37). One noted profanity at ~06:40 — bleep or mute depending on platform. Both speakers appear at similar levels based on transcript pacing.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-title">Graphics / Lower Thirds</div>
+        <div class="note-body">Guest names at open: Paul Hardcastle / Brett Jollof. Chapter cards at transitions: <em>"THE CONFLICT"</em> (F2→F1) and <em>"THE BIG PICTURE"</em> (F1→F3). Stat callouts: $5M/day, 15% missile reserves, 2M Iranians fled, nukes ~2 weeks from completion.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-title">Music / Sound Design</div>
+        <div class="note-body">Cinematic ambient drone bed for intro sequence. Pull back under heavy conversation. Subtle tension builds work well on geopolitics segments. Hard cut to silence on the moral closing question — let it land.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-title">Colour Grade</div>
+        <div class="note-body">Match grade across all three DJI files. Recommend cooler, desaturated look for geopolitics credibility — newsroom aesthetic. Add KamCast Studios end card branding.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-title">Captions</div>
+        <div class="note-body">Transcripts available for all three files — use as closed caption base. Timecode is semicolon-separated non-drop frame format. Convert to standard 00:00:00:00 in your NLE before importing.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-title">Delivery Specs</div>
+        <div class="note-body">Full episode: H.264 MP4, 1080p min, stereo 48kHz. Social clips: vertical 9:16 for A, D, F, G. Thumbnail: still from Clip E (narrative flip moment) — high visual impact.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 07 CHECKLIST ── -->
+<section id="checklist">
+  <div class="container">
+    <div class="section-label">07</div>
+    <h2>Assembly Edit Checklist</h2>
+    <p style="margin-bottom:16px">Click to check off as you go. Resets on page reload.</p>
+    <div class="checklist" id="checklist">
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">01</div>
+        <div class="check-text">Place DJI_Main_2 first in timeline — start at 00;08;12;45</div>
+        <div class="priority-tag">FIRST</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">02</div>
+        <div class="check-text">Remove all segments flagged CUT in Section 03</div>
+        <div class="priority-tag">FIRST</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">03</div>
+        <div class="check-text">Trim all segments flagged TRIM — clean in/out points</div>
+        <div class="priority-tag">FIRST</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">04</div>
+        <div class="check-text">Insert 0.5s audio crossfade at File 2 → File 1 transition</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">05</div>
+        <div class="check-text">Insert chapter cards at both transitions (THE CONFLICT / THE BIG PICTURE)</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">06</div>
+        <div class="check-text">Apply lower thirds for guest names at open</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">07</div>
+        <div class="check-text">Colour match across all three DJI files</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">08</div>
+        <div class="check-text">Review and normalise audio levels across file joins</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">09</div>
+        <div class="check-text">Export full episode (H.264, 1080p, stereo 48kHz)</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">10</div>
+        <div class="check-text">Export 7 social clips A–G (see Section 05) including 9:16 versions of A, D, F, G</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">11</div>
+        <div class="check-text">Add KamCast Studios end card</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">12</div>
+        <div class="check-text">Import closed captions from transcript files — convert TC format first</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-num">13</div>
+        <div class="check-text">Final QC review before delivery</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div style="height:60px"></div>
+
+<script>
+  // ── NAV active state on scroll ──
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`nav a[href="#${e.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  // ── Row filter ──
+  let currentFilter = 'all';
+  function filterRows(flag) {
+    currentFilter = flag;
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.className = 'filter-btn';
+      if (b.textContent.toLowerCase() === flag) {
+        b.classList.add(flag === 'all' ? 'active-all' : `active-${flag}`);
+      }
+    });
+    ['tbody-f2','tbody-f1','tbody-f3'].forEach(id => {
+      const tbody = document.getElementById(id);
+      if (!tbody) return;
+      tbody.querySelectorAll('tr').forEach(row => {
+        const rowFlag = row.getAttribute('data-flag');
+        row.classList.toggle('hidden', flag !== 'all' && rowFlag !== flag);
+      });
+    });
+  }
+
+  // ── Checklist ──
+  function toggleCheck(row) {
+    row.classList.toggle('done');
+  }
+</script>
+</body>
+</html>
